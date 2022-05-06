@@ -1,0 +1,17 @@
+.DS_Store
+
+application/cache/*
+!application/cache/index.html
+
+application/logs/*
+!application/logs/index.html
+
+!application/*/.htaccess
+
+composer.lock
+queries
+
+/vendor/
+
+uploads/banners/*
+!uploads/banners/index.html
