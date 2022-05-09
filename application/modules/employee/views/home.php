@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <div class="row">
-    <div class="col-md-3" onclick="window.location.href = '<?= base_url(admin('employees')) ?>'">
+    <div class="col-md-3" onclick="window.location.href = '<?= base_url(admin('employee')) ?>'">
         <div class="card">
             <div class="card-body">
                 <div class="chart-widget-dashboard">
@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3" onclick="window.location.href = '<?= base_url(admin('users')) ?>'">
+    <div class="col-md-3" onclick="window.location.href = '<?= base_url(admin('user')) ?>'">
         <div class="card">
             <div class="card-body">
                 <div class="chart-widget-dashboard">

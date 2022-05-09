@@ -2,7 +2,7 @@
 
 class Home extends Admin_controller  {
 
-	protected $table = 'admins';
+	protected $table = 'employees';
 	protected $redirect = 'dashboard';
 	
 	public function index()

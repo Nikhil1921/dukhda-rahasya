@@ -71,18 +71,6 @@
                             <li>
                                 <?= anchor(admin('dashboard'), '<i data-feather="home"></i><span> Dashboard</span>', 'class="sidebar-header '.($name === 'dashboard' ? 'active' : '').'"') ?>
                             </li>
-                            <li>
-                                <?= anchor(admin('banners'), '<i data-feather="image"></i><span> Banners</span>', 'class="sidebar-header '.($name === 'banner' ? 'active' : '').'"') ?>
-                            </li>
-                            <li>
-                                <?= anchor(admin('users'), '<i data-feather="users"></i><span> Users</span>', 'class="sidebar-header '.($name === 'users' ? 'active' : '').'"') ?>
-                            </li>
-                            <li>
-                                <?= anchor(admin('packages'), '<i data-feather="credit-card"></i><span> Packages</span>', 'class="sidebar-header '.($name === 'packages' ? 'active' : '').'"') ?>
-                            </li>
-                            <li>
-                                <?= anchor(admin('employees'), '<i data-feather="users"></i><span> Employees</span>', 'class="sidebar-header '.($name === 'employees' ? 'active' : '').'"') ?>
-                            </li>
                         </ul>
                     </div>
                 </div>

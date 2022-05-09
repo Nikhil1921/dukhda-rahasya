@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Users extends Admin_controller  {
+class Employees extends Admin_controller  {
 
     public function __construct()
 	{
@@ -8,10 +8,10 @@ class Users extends Admin_controller  {
 		$this->path = $this->config->item('users');
 	}
 
-	private $table = 'users';
-	protected $redirect = 'users';
-	protected $title = 'User';
-	protected $name = 'users';
+	private $table = 'employees';
+	protected $redirect = 'employees';
+	protected $title = 'Employee';
+	protected $name = 'employees';
 	
 	public function index()
 	{
@@ -27,7 +27,7 @@ class Users extends Admin_controller  {
     public function get()
     {
         check_ajax();
-        $this->load->model('Users_model', 'data');
+        $this->load->model('Employees_model', 'data');
         $fetch_data = $this->data->make_datatables();
         $sr = $this->input->get('start') + 1;
         $data = [];
@@ -39,7 +39,16 @@ class Users extends Admin_controller  {
             $sub_array[] = $row->name;
             $sub_array[] = $row->mobile;
             $sub_array[] = $row->email;
-            $sub_array[] = date('d-m-Y h:i A', $row->create_at);
+
+            $action = '<div class="btn-group" role="group"><button class="btn btn-success dropdown-toggle" id="btnGroupVerticalDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="icon-settings"></span></button><div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1" x-placement="bottom-start">';
+            
+            $action .= form_open($this->redirect.'/delete', 'id="'.e_id($row->id).'"', ['id' => e_id($row->id)]).
+                '<a class="dropdown-item" onclick="script.delete('.e_id($row->id).'); return false;" href=""><i class="fa fa-trash"></i> Delete</a>'.
+                form_close();
+
+            $action .= '</div></div>';
+            $sub_array[] = $action;
             
             $data[] = $sub_array;
             $sr++;

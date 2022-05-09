@@ -5,8 +5,8 @@ define('PATH_INFOS', $_SERVER["HTTP_HOST"] == 'localhost' ? (isset($_SERVER['PAT
 
 if(strpos(PATH_INFOS, 'adminPanel') !== false)
     define('ADMIN', 'adminPanel');
-else if(strpos(PATH_INFOS, 'staff') !== false)
-    define('ADMIN', 'staff');
+else if(strpos(PATH_INFOS, 'employee') !== false)
+    define('ADMIN', 'employee');
 else
     define('ADMIN', 'adminPanel');
     
