@@ -65,7 +65,7 @@
                         <div class="sidebar-user text-center">
                             <div><?= img(['src' => 'assets/images/user.png', 'class' => "img-60 rounded-circle"]) ?></div>
                             <h6 class="mt-3 f-14"><?= $this->user->name ?></h6>
-                            <p>ADMIN</p>
+                            <p>EMPLOYEE</p>
                         </div>
                         <ul class="sidebar-menu">
                             <li>

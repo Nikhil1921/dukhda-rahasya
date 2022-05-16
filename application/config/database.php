@@ -11,9 +11,9 @@ switch ($_SERVER['SERVER_NAME']) {
         $db['default'] = array(
             'dsn'   => '',
             'hostname' => 'localhost',
-            'username' => 'labmajol_dukhdarahasya',
-            'password' => 'dukhdarahasya@lm2525',
-            'database' => 'labmajol_new_dukhdarahasya',
+            'username' => 'densehwm_demo',
+            'password' => 'Densetek@2018',
+            'database' => 'densehwm_dukhdarahasya',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => (ENVIRONMENT !== 'production'),
@@ -30,16 +30,16 @@ switch ($_SERVER['SERVER_NAME']) {
             'save_queries' => TRUE
         );
         break;
-    case 'www.test.dukhdarahasya.co':
-    case 'test.dukhdarahasya.co':
-    case 'https://www.test.dukhdarahasya.co':
-    case 'https://test.dukhdarahasya.co':
+    case 'www.densetek.gq':
+    case 'densetek.gq':
+    case 'https://www.densetek.gq':
+    case 'https://densetek.gq':
         $db['default'] = array(
             'dsn'   => '',
             'hostname' => 'localhost',
-            'username' => 'labmajol_demo',
+            'username' => 'densehwm_demo',
             'password' => 'Densetek@2018',
-            'database' => 'labmajol_test_dukhdarahasya',
+            'database' => 'densehwm_dukhdarahasya',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => (ENVIRONMENT !== 'production'),

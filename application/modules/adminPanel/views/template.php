@@ -78,7 +78,13 @@
                                 <?= anchor(admin('users'), '<i data-feather="users"></i><span> Users</span>', 'class="sidebar-header '.($name === 'users' ? 'active' : '').'"') ?>
                             </li>
                             <li>
+                                <?= anchor(admin('category'), '<i data-feather="file-text"></i><span> Category</span>', 'class="sidebar-header '.($name === 'category' ? 'active' : '').'"') ?>
+                            </li>
+                            <li>
                                 <?= anchor(admin('packages'), '<i data-feather="credit-card"></i><span> Packages</span>', 'class="sidebar-header '.($name === 'packages' ? 'active' : '').'"') ?>
+                            </li>
+                            <li>
+                                <?= anchor(admin('astrologers'), '<i data-feather="star"></i><span> Astrologers</span>', 'class="sidebar-header '.($name === 'astrologers' ? 'active' : '').'"') ?>
                             </li>
                             <li>
                                 <?= anchor(admin('employees'), '<i data-feather="users"></i><span> Employees</span>', 'class="sidebar-header '.($name === 'employees' ? 'active' : '').'"') ?>

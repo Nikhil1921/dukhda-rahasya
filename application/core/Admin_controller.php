@@ -10,8 +10,17 @@ class Admin_controller extends MY_Controller
 		parent::__construct();
 		if (!$this->session->auth) 
 			return redirect(admin('login'));
-
-        $this->user = (object) $this->main->get("admins", 'name, mobile, email', ['id' => $this->session->auth]);
+		
+		switch (ADMIN) {
+			case 'adminPanel':
+				$this->user = (object) $this->main->get("admins", 'name, mobile, email', ['id' => $this->session->auth]);
+				break;
+			
+			default:
+				$this->user = (object) $this->main->get("employees", 'name, mobile, email', ['id' => $this->session->auth]);
+				break;
+		}
+        
 		$this->redirect = admin($this->redirect);
 	}
 }
