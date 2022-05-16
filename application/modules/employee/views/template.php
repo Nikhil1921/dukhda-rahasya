@@ -71,6 +71,9 @@
                             <li>
                                 <?= anchor(admin('dashboard'), '<i data-feather="home"></i><span> Dashboard</span>', 'class="sidebar-header '.($name === 'dashboard' ? 'active' : '').'"') ?>
                             </li>
+                            <li>
+                                <?= anchor(admin('users'), '<i data-feather="users"></i><span> Users</span>', 'class="sidebar-header '.($name === 'users' ? 'active' : '').'"') ?>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -119,6 +122,10 @@
         <script src="<?= base_url('assets/back/js/notify/bootstrap-notify.min.js') ?>"></script>
         <input type="hidden" id="base_url" value="<?= base_url(admin()) ?>" />
         <input type="hidden" name="admin" value="<?= ADMIN ?>" />
+        <?php if(isset($chat)): ?>
+            <input type="hidden" name="chat-id" value="<?= $id ?>" />
+            <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+        <?php endif ?>
         <?php if(isset($datatable)): ?>
         <input type="hidden" name="dataTableUrl" value="<?= base_url($datatable) ?>" />
         <script src="<?= base_url('assets/back/js/datatable/datatables/jquery.dataTables.min.js') ?>"></script>
@@ -138,5 +145,6 @@
         <script src="<?= base_url('assets/back/js/select2/select2-custom.js') ?>"></script>
         <script src="<?= base_url('assets/back/js/editor/ckeditor/ckeditor.js') ?>"></script>
         <script src="<?= base_url('assets/back/js/script.js') ?>"></script>
+        
     </body>
 </html>

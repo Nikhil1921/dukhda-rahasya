@@ -145,4 +145,34 @@ class Home extends API_controller {
 
 		echoRespnse(200, $response);
 	}
+
+	/* public function chat($id)
+	{
+		if($this->input->is_ajax_request()){
+			$options = [
+				'cluster' => 'ap2',
+				'encrypted' => true
+			];
+
+			$pusher = new Pusher\Pusher('1bcc03ffc88b92ba0906', '8bf81f16e0fd1337000f', '1407436', $options);
+			
+			$data = ['message' => $this->input->post('message'), 'sender' => "ME", 'dt' => date('d-m-Y h:i a')];
+
+			$pusher->trigger(e_id($id).'_channel', 'my-event', $data);
+
+			$post = [
+                'message'      => $data['message'],
+                'created_at'   => time(),
+                'created_by'   => $id,
+                'u_id'         => $id,
+                'message_type' => 'User'
+            ];
+
+			echo ($this->main->add($post, 'chats')) ? 'success' : 'error';
+		}else{
+			$data['id'] = $id;
+			$data['chats'] = $this->main->getAll('chats', 'message, created_at, message_type', ['u_id' => $id], '', 100);
+			return $this->load->view('chat', $data);
+		}
+	} */
 }

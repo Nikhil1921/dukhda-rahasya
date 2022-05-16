@@ -86,34 +86,23 @@
             <div class="row">	
             <div class = "col-md-6 col-md-offset-3 chat_box" id="chatbox">						
                 <div class = "messages_display">
-                    
-                    <div class="text-center"><button type="button" class="btn waves-effect waves-light btn-secondary"><?php echo date('F'); ?> APRIL, 2022</button></div>
-        
-                    <div class="text-center"><button type="button" class="btn waves-effect waves-light btn-secondary">Today</button></div>
-            
-                    <br />
-                    
-                        <!--chat Row -->
-                        <!-- <div class="col-xs-12 row">
+                    <?php foreach($chats as $chat): 
+                    echo ($chat['message_type'] !== "Admin") ? '<div class="col-xs-12 row">
                             <div class="col-xs-11 text-right">
-                                <div class="alert alert-success">Hello <br> <?= date('h:i a'); ?></div>
+                                <div class="alert alert-success">'.$chat['message'].' <br> '.date('d-m-Y h:i a', $chat['created_at']).'</div>
                             </div>
                             <div class="col-xs-1">
-                                <img class="" src="<?= base_url('assets/images/profile.png') ?>" alt="user"/> 
+                                 <img class="" src="'.base_url('assets/images/profile.png').'" alt="user"/> 
                             </div>
-                        </div> -->
-                        <!--chat Row -->
-                    
-                        <!--chat Row -->
-                        <!-- <div class="col-xs-12 row">
+                        </div>' : '<div class="col-xs-12 row">
                             <div class="col-xs-1">
-                                <img class="" src="<?= base_url('assets/images/profile.png') ?>" alt="user"/> 
+                                <img class="" src="'.base_url('assets/images/profile.png').'" alt="user"/> 
                             </div>
                             <div class="col-xs-11">
-                                <div class="alert alert-success">Hello <br> <?= date('h:i a'); ?></div>
+                                <div class="alert alert-success">'.$chat['message'].' <br> '.date('d-m-Y h:i a', $chat['created_at']).'</div>
                             </div>
-                        </div> -->
-                        <!--chat Row -->
+                        </div>';
+                    endforeach ?>
                 </div>
                 <br />					
                 <div class = "form_ col-xs-10" style="position: relative; bottom: 0;">
@@ -133,7 +122,7 @@
                 encrypted: true
             });
             
-            var channel = pusher.subscribe('<?= $id ?>_channel');
+            var channel = pusher.subscribe('<?= e_id($id) ?>_channel');
 
             channel.bind('my-event',
                 function(data) {
@@ -200,6 +189,8 @@
                 e.preventDefault();
                 $('.chat_box .input_send').click();
             });
+
+            $(".messages_display").scrollTop($(".messages_display")[0].scrollHeight);
         </script>
     </body>
 </html>

@@ -7,11 +7,11 @@
                     <div class="media">
                         <div class="media-body">
                             <h5 class="mt-0 mb-0 f-w-600">
-                                <span class="counter">0</span>
+                                <span class="counter"><?= $this->main->counter('employees', ['is_deleted' => 0]) ?></span>
                             </h5>
                             <p>Total employees</p>
                         </div>
-                        <i class="fa fa-ambulance fa-2x"></i>
+                        <i class="fa fa-users fa-2x"></i>
                     </div>
                 </div>
             </div>
@@ -24,11 +24,11 @@
                     <div class="media">
                         <div class="media-body">
                             <h5 class="mt-0 mb-0 f-w-600">
-                                <span class="counter">0</span>
+                                <span class="counter"><?= $this->main->counter('users', ['is_deleted' => 0]) ?></span>
                             </h5>
                             <p>Total Users</p>
                         </div>
-                        <i class="fa fa-file-text-o fa-2x"></i>
+                        <i class="fa fa-users fa-2x"></i>
                     </div>
                 </div>
             </div>

@@ -190,4 +190,101 @@ const submitForm = (form, button) => {
     });
 };
 
+if($('input[name=chat-id]').length > 0){
+    var pusher = new Pusher("1bcc03ffc88b92ba0906", {
+        cluster: "ap2",
+        encrypted: true,
+    });
+
+    var channel = pusher.subscribe(`${$("input[name=chat-id]").val()}_channel`);
+
+    var isOldTitle = true;
+    var oldTitle = document.getElementsByTagName("title")[0].innerHTML;
+    var newTitle = "You have new message";
+    var interval = null;
+    
+    function changeTitle() {
+      document.title = isOldTitle ? oldTitle : newTitle;
+      isOldTitle = !isOldTitle;
+    }
+
+    $(window).focus(function () {
+        clearInterval(interval);
+        $("title").text(oldTitle);
+    });
+
+    channel.bind("my-event", function (data) {
+        let msg =
+          data.sender === "Admin"
+            ? `<li>
+                    <div class="message my-message text-right">
+                        <div class="message-data text-right">
+                            <span class="message-data-time">${data.dt}</span>
+                        </div>
+                        ${data.message}
+                    </div>
+                </li>`
+            : `<li class="clearfix">
+                    <div class="message other-message pull-right">
+                        <div class="message-data">
+                            <span class="message-data-time">${data.dt}</span>
+                        </div>
+                        ${data.message}
+                    </div>
+                </li>`;
+
+        $(".messages_display").append(msg);
+
+        if (data.sender !== "Admin") interval = setInterval(changeTitle, 700);
+
+        $("#send-btn").attr('disabled', false);
+
+        $(".chat-history").scrollTop($(".chat-history")[0].scrollHeight);
+    });
+
+    channel.bind("pusher:subscription_succeeded", function (members) {});
+
+    function ajaxCall(data) {
+        $.ajax({
+            type: "POST",
+            data: data,
+        });
+    }
+
+    $.fn.enterKey = function (fnc) {
+        return this.each(function () {
+            $(this).keypress(function (ev) {
+            var keycode = ev.keyCode ? ev.keyCode : ev.which;
+            if (keycode == "13") {
+                fnc.call(this, ev);
+            }
+            });
+        });
+    };
+
+    $("body").on("click", "#send-btn", function (e) {
+
+        e.preventDefault();
+
+        var message = $("#message-to-send").val();
+
+        if (message !== "") {
+            var chat_message = {
+                message: message,
+                user: $("input[name=chat-id]").val(),
+            };
+            ajaxCall(chat_message);
+            $("#message-to-send").val("");
+            $("#send-btn").attr("disabled", true);
+        }
+    });
+
+    $("#message-to-send").enterKey(function (e) {
+        e.preventDefault();
+        $("#send-btn").click();
+    });
+
+    $(".chat-history").scrollTop($(".chat-history")[0].scrollHeight);
+}
+
 // custom code end here
