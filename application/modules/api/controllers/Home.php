@@ -146,7 +146,7 @@ class Home extends API_controller {
 		echoRespnse(200, $response);
 	}
 
-	/* public function chat($id)
+	public function chat($id)
 	{
 		if($this->input->is_ajax_request()){
 			$options = [
@@ -174,5 +174,5 @@ class Home extends API_controller {
 			$data['chats'] = $this->main->getAll('chats', 'message, created_at, message_type', ['u_id' => $id], '', 100);
 			return $this->load->view('chat', $data);
 		}
-	} */
+	}
 }

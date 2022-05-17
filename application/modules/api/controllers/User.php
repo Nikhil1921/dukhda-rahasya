@@ -3,9 +3,7 @@
 class User extends API_controller {
 
     public function chat()
-	{
-		get();
-		
+	{	
 		if($this->input->is_ajax_request()){
 			$options = [
 				'cluster' => 'ap2',
