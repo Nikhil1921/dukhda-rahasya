@@ -146,6 +146,19 @@ class Home extends API_controller {
 		echoRespnse(200, $response);
 	}
 
+	public function getPackagesList()
+	{
+		get();
+
+		$packs = $this->api->getPackagesList();
+		
+		$response['row'] = $packs ? $packs : [];
+		$response['error'] = $packs ? false : true;
+		$response['message'] = $packs ? "Packages list success." : "Packages list not success.";
+
+		echoRespnse(200, $response);
+	}
+
 	public function chat($id)
 	{
 		if($this->input->is_ajax_request()){

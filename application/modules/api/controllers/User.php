@@ -2,7 +2,45 @@
 
 class User extends API_controller {
 
-    public function chat()
+    public function purchase_plan()
+    {
+		post();
+
+		$this->form_validation->set_rules('pack_id', 'Package ID', 'required|is_natural|max_length[4]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 4 chars allowed."]);
+		$this->form_validation->set_rules('price', 'Price', 'required|is_natural|max_length[4]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 4 chars allowed."]);
+		$this->form_validation->set_rules('validity', 'Validity', 'required|is_natural|max_length[2]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 2 chars allowed."]);
+		$this->form_validation->set_rules('payment_id', 'Payment ID', 'required|max_length[100]', ['required' => "%s is required", 'max_length' => "Max 100 chars allowed."]);
+
+		verifyRequiredParams();
+
+		$post = [
+			'u_id' => $this->api,
+			'created_at' => time(),
+			'price' => $this->input->post('price'),
+			'pack_id' => $this->input->post('pack_id'),
+			'validity' => $this->input->post('validity'),
+			'payment_id' => $this->input->post('payment_id')
+		];
+
+		$purchase = $this->main->add($post, 'purchased_plans');
+
+		$response['row'] = $purchase ? $purchase : 0;
+		$response['error'] = $purchase ? false : true;
+		$response['message'] = $purchase ? "Plan purchase success." : "Plan purchase not success.";
+
+		echoRespnse(200, $response);
+    }
+
+    public function __construct()
+    {
+        parent::__construct($this->table);
+        $this->load->model('api_model');
+        $this->api = $this->verify_api_key();
+    }
+
+    protected $table = 'users';
+
+    /* public function chat()
 	{	
 		if($this->input->is_ajax_request()){
 			$options = [
@@ -30,41 +68,5 @@ class User extends API_controller {
 			$data['chats'] = $this->main->getAll('chats', 'message, created_at, message_type', ['u_id' => $this->api], '', 100);
 			return $this->load->view('chat', $data);
 		}
-	}
-
-    public function purchase_plan()
-    {
-		post();
-
-		$this->form_validation->set_rules('price', 'Price', 'required|is_natural|max_length[4]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 4 chars allowed."]);
-		$this->form_validation->set_rules('validity', 'Validity', 'required|is_natural|max_length[2]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 2 chars allowed."]);
-		$this->form_validation->set_rules('payment_id', 'Payment ID', 'required|max_length[100]', ['required' => "%s is required", 'max_length' => "Max 100 chars allowed."]);
-
-		verifyRequiredParams();
-
-		$post = [
-			'u_id' => $this->api,
-			'created_at' => time(),
-			'price' => $this->input->post('price'),
-			'validity' => $this->input->post('validity'),
-			'payment_id' => $this->input->post('payment_id')
-		];
-
-		$purchase = $this->main->add($post, 'purchased_plans');
-
-		$response['row'] = $purchase ? $purchase : 0;
-		$response['error'] = $purchase ? false : true;
-		$response['message'] = $purchase ? "Plan purchase success." : "Plan purchase not success.";
-
-		echoRespnse(200, $response);
-    }
-
-    public function __construct()
-    {
-        parent::__construct($this->table);
-        $this->load->model('api_model');
-        $this->api = $this->verify_api_key();
-    }
-
-    protected $table = 'users';
+	} */
 }

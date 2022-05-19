@@ -40,6 +40,15 @@ class Api_model extends MY_Model
                         ->result_array();
     }
 
+    public function getPackagesList()
+    {
+        return $this->db->select('id, p_name, price, validity')
+                        ->from('packages')
+                        ->where('is_deleted', 0)
+                        ->get()
+                        ->result_array();
+    }
+
     public function getAstrologers()
     {
         $asts = $this->db->select('a.id, a.name, a.pack_id, a.place, a.experience, a.education, p.p_name, p.price, p.validity')
