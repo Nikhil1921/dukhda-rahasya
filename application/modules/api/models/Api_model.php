@@ -9,6 +9,7 @@ class Api_model extends MY_Model
 		parent::__construct();
 		$this->banners = $this->config->item('banners');
 		$this->category = $this->config->item('category');
+		$this->astrologers = $this->config->item('astrologers');
 	}
 
     protected $table = 'users';
@@ -49,9 +50,29 @@ class Api_model extends MY_Model
                         ->result_array();
     }
 
-    public function getAstrologers()
+    public function getAstrologers($c_id=0)
     {
-        $asts = $this->db->select('a.id, a.name, a.pack_id, a.place, a.experience, a.education, p.p_name, p.price, p.validity')
+        $this->db->select('a.id, a.name, a.pack_id, a.place, a.experience, a.education, p.p_name, p.price, p.validity, CONCAT("'.base_url($this->astrologers).'", image) image')
+                 ->where('a.is_deleted', 0)
+                 ->join('astrologers a', 'ac.ast_id = a.id')
+                 ->join('packages p', 'a.pack_id = p.id');
+
+        if($c_id > 0) $asts = $this->db->where('ac.is_deleted', $c_id);
+
+        $asts = $this->db->group_by('ac.ast_id')
+                         ->get('astrologers_category ac')
+                         ->result_array();
+
+        $asts = array_map(function($ast){
+            $ast['cats'] = $this->db->select('c.cat_name, c.id')
+                                    ->where('c.is_deleted', 0)
+                                    ->where('ac.ast_id', $ast['id'])
+                                    ->join('category c', 'ac.cat_id = c.id')
+                                    ->get('astrologers_category ac')
+                                    ->result();
+            return $ast;
+        }, $asts);
+        /* $asts = $this->db->select('a.id, a.name, a.pack_id, a.place, a.experience, a.education, p.p_name, p.price, p.validity')
                         ->from('astrologers a')
                         ->where('a.is_deleted', 0)
                         ->join('packages p', 'a.pack_id = p.id')
@@ -67,6 +88,7 @@ class Api_model extends MY_Model
                                     ->result();
             return $ast;
         }, $asts);
+         */
         return $asts;
     }
 }

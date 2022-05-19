@@ -19,3 +19,5 @@ uploads/users/*
 !uploads/users/index.html
 uploads/category/*
 !uploads/category/index.html
+uploads/astrologers/*
+!uploads/astrologers/index.html

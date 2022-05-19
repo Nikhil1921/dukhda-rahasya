@@ -6,3 +6,4 @@ $config['mobile'] = '8320406016';
 $config['banners'] = 'uploads/banners/';
 $config['users'] = 'uploads/users/';
 $config['category'] = 'uploads/category/';
+$config['astrologers'] = 'uploads/astrologers/';
