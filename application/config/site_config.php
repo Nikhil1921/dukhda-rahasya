@@ -7,3 +7,4 @@ $config['banners'] = 'uploads/banners/';
 $config['users'] = 'uploads/users/';
 $config['category'] = 'uploads/category/';
 $config['astrologers'] = 'uploads/astrologers/';
+$config['payments'] = 'uploads/payments/';

@@ -23,12 +23,13 @@ class Home extends API_controller {
 			'mobile'     => $this->input->post('mobile'),
 			'password'   => my_crypt($this->input->post('password')),
 		];
-
+		
 		$user = $this->api->getProfile($post);
 
 		/* if($user)
-			$this->api->update(['id' => $user['id']], ['token' => $this->input->post('token')], $this->table); */
-		
+		{
+			$this->api->update(['id' => $user['id']], ['token' => $this->input->post('token')], $this->table);
+		} */
 		
 		$response['row'] = $user ? $user : [];
 		$response['error'] = $user ? false : true;
@@ -137,7 +138,7 @@ class Home extends API_controller {
 	{
 		get();
 
-		$asts = $this->api->getAstrologers();
+		$asts = $this->api->getAstrologers($this->input->get('c_id'));
 		
 		$response['row'] = $asts ? $asts : [];
 		$response['error'] = $asts ? false : true;
@@ -155,6 +156,40 @@ class Home extends API_controller {
 		$response['row'] = $packs ? $packs : [];
 		$response['error'] = $packs ? false : true;
 		$response['message'] = $packs ? "Packages list success." : "Packages list not success.";
+
+		echoRespnse(200, $response);
+	}
+
+	public function chat_verify($id)
+	{
+		$plan = $this->main->get('purchased_plans', 'created_at, validity, daily_validity', ['is_approved' => 1, 'u_id' => $id]);
+			
+		if(!$plan)
+		{
+			$response['error'] = true;
+			$response['message'] = "You don't have active purchased plan.";
+		}else{
+			if(date("d-m-Y", strtotime('+ '.$plan['validity'].' Days')) < date("d-m-Y", $plan['created_at']))
+			{
+				$response['error'] = true;
+				$response['message'] = "Your purchased plan is expired.";
+				
+			}else{
+				
+				$this->load->model('api_model');
+				$chat_timer = $this->api_model->chat_timer($plan, $id);
+
+				if($chat_timer['t_time'] <= date('H:i:s'))
+				{
+					$response['error'] = true;
+					$response['message'] = "Your daily time is over.";
+				}else{
+					$response['row'] = $chat_timer['t_time'];
+					$response['error'] = false;
+					$response['message'] = "Your can chat now.";
+				}
+			}
+		}
 
 		echoRespnse(200, $response);
 	}
@@ -183,8 +218,10 @@ class Home extends API_controller {
 
 			echo ($this->main->add($post, 'chats')) ? 'success' : 'error';
 		}else{
+
 			$data['id'] = $id;
 			$data['chats'] = $this->main->getAll('chats', 'message, created_at, message_type', ['u_id' => $id], '', 100);
+			
 			return $this->load->view('chat', $data);
 		}
 	}

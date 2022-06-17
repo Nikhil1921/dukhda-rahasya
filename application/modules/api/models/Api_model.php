@@ -43,7 +43,7 @@ class Api_model extends MY_Model
 
     public function getPackagesList()
     {
-        return $this->db->select('id, p_name, price, validity')
+        return $this->db->select('id, p_name, price, validity, daily_validity')
                         ->from('packages')
                         ->where('is_deleted', 0)
                         ->get()
@@ -57,13 +57,13 @@ class Api_model extends MY_Model
                  ->join('astrologers a', 'ac.ast_id = a.id')
                  ->join('packages p', 'a.pack_id = p.id');
 
-        if($c_id > 0) $asts = $this->db->where('ac.is_deleted', $c_id);
+        if($c_id > 0) $asts = $this->db->where('ac.cat_id', $c_id);
 
         $asts = $this->db->group_by('ac.ast_id')
                          ->get('astrologers_category ac')
                          ->result_array();
 
-        $asts = array_map(function($ast){
+        $asts = array_map(function($ast) {
             $ast['cats'] = $this->db->select('c.cat_name, c.id')
                                     ->where('c.is_deleted', 0)
                                     ->where('ac.ast_id', $ast['id'])
@@ -90,5 +90,43 @@ class Api_model extends MY_Model
         }, $asts);
          */
         return $asts;
+    }
+
+    public function purchased_plans()
+    {
+        return array_map(function($plan){
+            $plan['purchase_date'] = date("d-m-Y", $plan['purchase_date']);
+            $plan['expired'] = date("d-m-Y", strtotime('- '.$plan['validity'].' Days')) <= $plan['purchase_date'] ? false : true;
+            
+            return $plan;
+        }, $this->db->select('pp.created_at AS purchase_date, pp.price, pp.validity, pp.daily_validity, pp.payment_id, pp.is_approved')
+                    ->from('purchased_plans pp')
+                    ->where(['u_id' => $this->api])
+                    ->join('packages p', 'pp.pack_id = p.id')
+                    ->order_by("pp.id DESC")
+                    ->get()
+                    ->result_array());
+    }
+
+    public function chat_timer($plan, $api)
+    {
+        $timer = $this->db->select('t_time')
+                            ->from('chat_timer')
+                            ->where(['u_id' => $api, 't_date' => date('Y-m-d')])
+                            ->get()
+                            ->row_array();
+
+        if(!$timer)
+        {
+            $timer = [
+                'u_id'   => $api,
+                't_date' => date('Y-m-d'),
+                't_time' => date('H:i:s', strtotime("+ ".$plan['daily_validity']." Minutes"))
+            ];
+            
+            $this->add($timer, 'chat_timer');
+        }
+        
+        return $timer;
     }
 }
