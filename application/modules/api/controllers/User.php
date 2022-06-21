@@ -53,6 +53,84 @@ class User extends API_controller {
 		echoRespnse(200, $response);
     }
 
+	public function profile()
+	{
+		get();
+
+		$profile = $this->api_model->get($this->table, 'name, mobile, email, create_at', ['id' => $this->api]);
+		$profile['create_at'] = date('d-m-Y', $profile['create_at']);
+		$response['row'] = $profile;
+		$response['error'] = false;
+		$response['message'] = "Profile success.";
+
+		echoRespnse(200, $response);
+	}
+
+	public function update_profile()
+	{
+		post();
+
+		$validate = [
+			[
+				'field' => 'name',
+				'label' => 'Name',
+				'rules' => 'required|max_length[50]|alpha_numeric_spaces|trim',
+				'errors' => [
+					'required' => "%s is required",
+					'alpha_numeric_spaces' => "%s is invalid",
+					'max_length' => "Max 50 chars allowed"
+				],
+			],
+			[
+				'field' => 'mobile',
+				'label' => 'Mobile',
+				'rules' => 'required|is_natural|exact_length[10]|callback_mobile_check|trim',
+				'errors' => [
+					'required' => "%s is required",
+					'is_natural' => "%s is invalid",
+					'exact_length' => "%s is invalid",
+				],
+			],
+			[
+				'field' => 'email',
+				'label' => 'Email',
+				'rules' => 'required|max_length[100]|callback_email_check|valid_email|trim',
+				'errors' => [
+					'required' => "%s is required",
+					'valid_email' => "%s is invalid",
+					'max_length' => "Max 100 chars allowed"
+				],
+			],
+			[
+				'field' => 'password',
+				'label' => 'Password',
+				'rules' => 'max_length[100]|trim',
+				'errors' => [
+					'max_length' => "Max 100 chars allowed"
+				],
+			]
+		];
+
+		$this->form_validation->set_rules($validate);
+
+		verifyRequiredParams();
+
+		$post = [
+			'name'   => $this->input->post('name'),
+			'mobile'   => $this->input->post('mobile'),
+			'email'   => $this->input->post('email'),
+		];
+
+		if($this->input->post('password')) $post['password'] = my_crypt($this->input->post('password'));
+		
+		$update = $this->api_model->update(['id' => $this->api], $post, $this->table);
+
+		$response['error'] = $update ? false : true;
+		$response['message'] = $update ? "Profile update success." : "Profile update not success.";
+
+		echoRespnse(200, $response);
+	}
+
 	public function chat_timer()
 	{
 		get();

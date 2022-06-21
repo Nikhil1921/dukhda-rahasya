@@ -36,6 +36,30 @@ class API_controller extends MY_Controller
         }
 	}
 
+    public function mobile_check($str)
+    {
+        $where = ['mobile' => $str, 'id != ' => $this->api];
+        
+        if ($this->main->check($this->table, $where, 'id'))
+        {
+            $this->form_validation->set_message('mobile_check', 'The %s is already in use');
+            return FALSE;
+        } else
+            return TRUE;
+    }
+
+    public function email_check($str)
+    {   
+        $where = ['email' => $str, 'id != ' => $this->api];
+        
+        if ($this->main->check($this->table, $where, 'id'))
+        {
+            $this->form_validation->set_message('email_check', 'The %s is already in use');
+            return FALSE;
+        } else
+            return TRUE;
+    }
+
 	public function error_404()
 	{
 		$response['error'] = true;
