@@ -17,9 +17,5 @@ uploads/banners/*
 !uploads/banners/index.html
 uploads/users/*
 !uploads/users/index.html
-uploads/category/*
-!uploads/category/index.html
-uploads/astrologers/*
-!uploads/astrologers/index.html
 uploads/payments/*
 !uploads/payments/index.html
