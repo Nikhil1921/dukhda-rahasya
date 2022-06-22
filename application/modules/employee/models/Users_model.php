@@ -28,14 +28,4 @@ class Users_model extends MY_Model
 		            	
 		return $this->db->get()->num_rows();
 	}
-
-	public function plan_purchased($id)
-	{
-		$this->db->select('id')
-		         ->from('purchased_plans')
-				 ->where('UNIX_TIMESTAMP(DATE_ADD(FROM_UNIXTIME(created_at), INTERVAL validity DAY)) >= ', time())
-				 ->where('u_id', $id);
-		            	
-		return $this->db->get()->row();
-	}
 }

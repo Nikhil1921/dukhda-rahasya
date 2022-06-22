@@ -138,7 +138,7 @@ class Home extends API_controller {
 	{
 		get();
 
-		$asts = $this->api->getAstrologers($this->input->get('c_id'));
+		$asts = $this->api->getAstrologers($this->input->get());
 		
 		$response['row'] = $asts ? $asts : [];
 		$response['error'] = $asts ? false : true;
@@ -162,34 +162,26 @@ class Home extends API_controller {
 
 	public function chat_verify($id)
 	{
-		$plan = $this->main->get('purchased_plans', 'MAX(created_at) AS created_at, MAX(validity) AS validity, SUM(daily_validity) AS daily_validity', ['is_approved' => 1, 'u_id' => $id]);
+		$plan = $this->main->plan_purchased($id);
 		
 		if(!$plan) {
 			$response['error'] = true;
-			$response['message'] = "You don't have active purchased plan.";
+			$response['message'] = "You don't have active purchased plan or purchased plan is expired.";
 		}else{
-			$expiry = strtotime('+'.$plan['validity'].' Days', $plan['created_at']);
+			$this->load->model('api_model');
+			$chat_timer = $this->api_model->chat_timer($id);
+
+			if($chat_timer) $expiry = strtotime("+ ".$plan->daily_validity." Minutes", strtotime($chat_timer['t_time']));
 			
-			if(time() >= $expiry) {
-				$response['error'] = true;
-				$response['message'] = "Your purchased plan is expired.";
+			if(!$chat_timer || (isset($expiry) && time() <= $expiry)) {
+				$response['error'] = false;
+				$response['message'] = "Your can chat now.";
 			}else{
-
-				$this->load->model('api_model');
-				$chat_timer = $this->api_model->chat_timer($id);
-
-				$expiry = date('H:i:s', strtotime("+ ".$plan['daily_validity']." Minutes", strtotime($chat_timer['t_time'])));
-
-				if($expiry > date('H:i:s')) {
-					$response['row'] = $expiry;
-					$response['error'] = false;
-					$response['message'] = "Your can chat now.";
-				}else{
-					$response['error'] = true;
-					$response['message'] = "Your daily time is over.";
-				}
+				$response['error'] = true;
+				$response['message'] = "Your daily time is over.";
 			}
 		}
+
 		echoRespnse(200, $response);
 	}
 
@@ -220,8 +212,18 @@ class Home extends API_controller {
 
 			$data['id'] = $id;
 			$data['chats'] = $this->main->getAll('chats', 'message, created_at, message_type', ['u_id' => $id], '', 100);
+			$data['astrologer'] = $this->main->plan_purchased($id);
 			
-			return $this->load->view('chat', $data);
+			if($data['astrologer'])
+			{
+				$this->load->model('api_model');
+				$profile = $this->api_model->get($this->table, 'CONCAT("'.$this->config->item('users').'", image) image', ['id' => $id]);
+				$data['profile']['image'] = is_file($profile['image']) ? $profile['image'] : "assets/images/profile.png";
+			
+				return $this->load->view('chat', $data);
+			}
+			else
+				return $this->chat_verify($id);
 		}
 	}
 }

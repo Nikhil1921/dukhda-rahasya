@@ -20,7 +20,6 @@ class Users extends Admin_controller  {
         $data['url'] = $this->redirect;
         $data['operation'] = "List";
         $data['datatable'] = "$this->redirect/get";
-        /* $plan = $this->main->get('purchased_plans', 'UNIX_TIMESTAMP(DATE_ADD(FROM_UNIXTIME(created_at), INTERVAL validity DAY)) AS expiry, created_at', ['UNIX_TIMESTAMP(DATE_ADD(FROM_UNIXTIME(created_at), INTERVAL validity DAY)) >= ' => time()]); */
         
 		return $this->template->load('template', "$this->redirect/home", $data);
 	}
@@ -44,7 +43,7 @@ class Users extends Admin_controller  {
 			$action = '<div class="btn-group" role="group"><button class="btn btn-success dropdown-toggle" id="btnGroupVerticalDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="icon-settings"></span></button><div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1" x-placement="bottom-start">';
             
-            if($this->data->plan_purchased($row->id))
+            if($this->main->plan_purchased($row->id))
                 $action .= anchor($this->redirect."/chat/".e_id($row->id), '<i class="fa fa-comments"></i> Chat</a>', 'class="dropdown-item" target="_blank"');
 
             $action .= '</div></div>';
@@ -86,6 +85,8 @@ class Users extends Admin_controller  {
             ];
 
             $pusher->trigger($id.'_channel', 'my-event', $data);
+
+            $this->main->chat_timer(d_id($id));
             
             echo ($this->main->add($post, 'chats')) ? 'success' : 'error';
 

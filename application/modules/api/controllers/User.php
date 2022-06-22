@@ -20,6 +20,7 @@ class User extends API_controller {
 		post();
 
 		$this->form_validation->set_rules('pack_id', 'Package ID', 'required|is_natural|max_length[4]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 4 chars allowed."]);
+		$this->form_validation->set_rules('a_id', 'Astrologer ID', 'required|is_natural|max_length[4]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 4 chars allowed."]);
 		$this->form_validation->set_rules('price', 'Price', 'required|is_natural|max_length[4]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 4 chars allowed."]);
 		$this->form_validation->set_rules('validity', 'Validity', 'required|is_natural|max_length[2]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 2 chars allowed."]);
 		$this->form_validation->set_rules('daily_validity', 'Daily Validity', 'required|is_natural|max_length[2]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 2 chars allowed."]);
@@ -38,6 +39,7 @@ class User extends API_controller {
 			'created_at' 	 => time(),
 			'price' 		 => $this->input->post('price'),
 			'pack_id' 		 => $this->input->post('pack_id'),
+			'a_id' 		     => $this->input->post('a_id'),
 			'validity' 		 => $this->input->post('validity'),
 			'daily_validity' => $this->input->post('daily_validity'),
 			'payment_id' 	 => $image['message']
@@ -57,8 +59,9 @@ class User extends API_controller {
 	{
 		get();
 
-		$profile = $this->api_model->get($this->table, 'name, mobile, email, create_at', ['id' => $this->api]);
+		$profile = $this->api_model->get($this->table, 'name, mobile, email, create_at, CONCAT("'.($this->path).'", image) image', ['id' => $this->api]);
 		$profile['create_at'] = date('d-m-Y', $profile['create_at']);
+		$profile['image'] = base_url(is_file($profile['image']) ? $profile['image'] : "assets/images/profile.png");
 		$response['row'] = $profile;
 		$response['error'] = false;
 		$response['message'] = "Profile success.";
@@ -122,8 +125,24 @@ class User extends API_controller {
 		];
 
 		if($this->input->post('password')) $post['password'] = my_crypt($this->input->post('password'));
+
+		if(!empty($_FILES['image']['name']))
+		{
+			$image = $this->uploadImage('image');
+        
+			if ($image['error'] == TRUE)
+				echoRespnse(200, $image);
+			else
+			{
+				$unlink = $this->path.$this->api_model->check($this->table, ['id' => $this->api], 'image');
+
+				$post['image'] = $image['message'];
+			}
+		}
 		
 		$update = $this->api_model->update(['id' => $this->api], $post, $this->table);
+
+		if($update && isset($unlink) && is_file($unlink)) unlink($unlink);
 
 		$response['error'] = $update ? false : true;
 		$response['message'] = $update ? "Profile update success." : "Profile update not success.";
@@ -149,6 +168,8 @@ class User extends API_controller {
         parent::__construct($this->table);
         $this->load->model('api_model');
         $this->api = $this->verify_api_key();
+
+		$this->path = $this->config->item('users');
     }
 
     protected $table = 'users';

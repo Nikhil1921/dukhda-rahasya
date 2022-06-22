@@ -50,14 +50,16 @@ class Api_model extends MY_Model
                         ->result_array();
     }
 
-    public function getAstrologers($c_id=0)
+    public function getAstrologers($get=[])
     {
-        $this->db->select('a.id, a.name, a.pack_id, a.place, a.experience, a.education, p.p_name, p.price, p.validity, CONCAT("'.base_url($this->astrologers).'", image) image')
+        $this->db->select('a.id, a.name, a.pack_id, a.place, a.experience, a.education, p.p_name, p.price, p.validity, CONCAT("'.base_url($this->astrologers).'", image) image, p.daily_validity')
                  ->where('a.is_deleted', 0)
                  ->join('astrologers a', 'ac.ast_id = a.id')
                  ->join('packages p', 'a.pack_id = p.id');
 
-        if($c_id > 0) $asts = $this->db->where('ac.cat_id', $c_id);
+        if(isset($get['c_id']) > 0) $asts = $this->db->where('ac.cat_id', $get['c_id']);
+        
+        if(isset($get['pack_id']) > 0) $asts = $this->db->where('p.id', $get['pack_id']);
 
         $asts = $this->db->group_by('ac.ast_id')
                          ->get('astrologers_category ac')
@@ -72,23 +74,7 @@ class Api_model extends MY_Model
                                     ->result();
             return $ast;
         }, $asts);
-        /* $asts = $this->db->select('a.id, a.name, a.pack_id, a.place, a.experience, a.education, p.p_name, p.price, p.validity')
-                        ->from('astrologers a')
-                        ->where('a.is_deleted', 0)
-                        ->join('packages p', 'a.pack_id = p.id')
-                        ->get()
-                        ->result_array();
-
-        $asts = array_map(function($ast){
-            $ast['cats'] = $this->db->select('c.cat_name')
-                                    ->where('c.is_deleted', 0)
-                                    ->where('ac.ast_id', $ast['id'])
-                                    ->join('category c', 'ac.cat_id = c.id')
-                                    ->get('astrologers_category ac')
-                                    ->result();
-            return $ast;
-        }, $asts);
-         */
+        
         return $asts;
     }
 
@@ -110,23 +96,10 @@ class Api_model extends MY_Model
 
     public function chat_timer($api)
     {
-        $timer = $this->db->select('t_time')
-                            ->from('chat_timer')
-                            ->where(['u_id' => $api, 't_date' => date('Y-m-d')])
-                            ->get()
-                            ->row_array();
-        
-        if(! $timer)
-        {
-            $timer = [
-                'u_id'   => $api,
-                't_date' => date('Y-m-d'),
-                't_time' => date('H:i:s')
-            ];
-            
-            $this->add($timer, 'chat_timer');
-        }
-        
-        return $timer;
+        return $this->db->select('t_time')
+                        ->from('chat_timer')
+                        ->where(['u_id' => $api, 't_date' => date('Y-m-d')])
+                        ->get()
+                        ->row_array();
     }
 }
