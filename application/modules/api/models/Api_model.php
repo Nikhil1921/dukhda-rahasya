@@ -108,20 +108,20 @@ class Api_model extends MY_Model
                     ->result_array());
     }
 
-    public function chat_timer($plan, $api)
+    public function chat_timer($api)
     {
         $timer = $this->db->select('t_time')
                             ->from('chat_timer')
                             ->where(['u_id' => $api, 't_date' => date('Y-m-d')])
                             ->get()
                             ->row_array();
-
-        if(!$timer)
+        
+        if(! $timer)
         {
             $timer = [
                 'u_id'   => $api,
                 't_date' => date('Y-m-d'),
-                't_time' => date('H:i:s', strtotime("+ ".$plan['daily_validity']." Minutes"))
+                't_time' => date('H:i:s')
             ];
             
             $this->add($timer, 'chat_timer');

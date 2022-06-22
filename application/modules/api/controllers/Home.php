@@ -162,35 +162,34 @@ class Home extends API_controller {
 
 	public function chat_verify($id)
 	{
-		$plan = $this->main->get('purchased_plans', 'created_at, validity, daily_validity', ['is_approved' => 1, 'u_id' => $id]);
-			
-		if(!$plan)
-		{
+		$plan = $this->main->get('purchased_plans', 'MAX(created_at) AS created_at, MAX(validity) AS validity, SUM(daily_validity) AS daily_validity', ['is_approved' => 1, 'u_id' => $id]);
+		
+		if(!$plan) {
 			$response['error'] = true;
 			$response['message'] = "You don't have active purchased plan.";
 		}else{
-			if(date("d-m-Y", strtotime('+ '.$plan['validity'].' Days')) < date("d-m-Y", $plan['created_at']))
-			{
+			$expiry = strtotime('+'.$plan['validity'].' Days', $plan['created_at']);
+			
+			if(time() >= $expiry) {
 				$response['error'] = true;
 				$response['message'] = "Your purchased plan is expired.";
-				
 			}else{
-				
-				$this->load->model('api_model');
-				$chat_timer = $this->api_model->chat_timer($plan, $id);
 
-				if($chat_timer['t_time'] <= date('H:i:s'))
-				{
-					$response['error'] = true;
-					$response['message'] = "Your daily time is over.";
-				}else{
-					$response['row'] = $chat_timer['t_time'];
+				$this->load->model('api_model');
+				$chat_timer = $this->api_model->chat_timer($id);
+
+				$expiry = date('H:i:s', strtotime("+ ".$plan['daily_validity']." Minutes", strtotime($chat_timer['t_time'])));
+
+				if($expiry > date('H:i:s')) {
+					$response['row'] = $expiry;
 					$response['error'] = false;
 					$response['message'] = "Your can chat now.";
+				}else{
+					$response['error'] = true;
+					$response['message'] = "Your daily time is over.";
 				}
 			}
 		}
-
 		echoRespnse(200, $response);
 	}
 
