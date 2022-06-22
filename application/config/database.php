@@ -30,16 +30,16 @@ switch ($_SERVER['SERVER_NAME']) {
             'save_queries' => TRUE
         );
         break;
-    case 'www.densetek.gq':
-    case 'densetek.gq':
-    case 'https://www.densetek.gq':
-    case 'https://densetek.gq':
+    case 'www.ultraitsolution.com':
+    case 'ultraitsolution.com':
+    case 'https://www.ultraitsolution.com':
+    case 'https://ultraitsolution.com':
         $db['default'] = array(
             'dsn'   => '',
             'hostname' => 'localhost',
             'username' => 'densehwm_demo',
             'password' => 'Densetek@2018',
-            'database' => 'densehwm_dukhdarahasya',
+            'database' => 'dukhdarahasya',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => (ENVIRONMENT !== 'production'),
