@@ -144,5 +144,4 @@
             $(".msg_card_body").scrollTop($(".msg_card_body")[0].scrollHeight);
         </script>
     </body>
-
 </html>
