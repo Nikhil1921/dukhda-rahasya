@@ -17,7 +17,7 @@ class User extends API_controller {
 
     public function purchase_plan()
     {
-		post();
+		post(); 
 
 		$this->form_validation->set_rules('pack_id', 'Package ID', 'required|is_natural|max_length[4]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 4 chars allowed."]);
 		$this->form_validation->set_rules('a_id', 'Astrologer ID', 'required|is_natural|max_length[4]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'max_length' => "Max 4 chars allowed."]);
