@@ -34,7 +34,7 @@ class Api_model extends MY_Model
 
     public function getCategoryList()
     {
-        return $this->db->select('id, cat_name, CONCAT("'.base_url($this->category).'", image) image')
+        return $this->db->select('id, cat_name, CONCAT("'.base_url($this->category).'", image, "?v=1.0.1") image')
                         ->from('category')
                         ->where('is_deleted', 0)
                         ->get()
