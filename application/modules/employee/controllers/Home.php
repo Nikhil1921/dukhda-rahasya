@@ -11,6 +11,8 @@ class Home extends Admin_controller  {
         $data['name'] = 'dashboard';
         $data['url'] = $this->redirect;
         
+        $this->load->model('users_model');
+        
         return $this->template->load('template', 'home', $data);
 	}
 

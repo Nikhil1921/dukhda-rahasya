@@ -17,7 +17,7 @@ class Admin_controller extends MY_Controller
 				break;
 			
 			default:
-				$this->user = (object) $this->main->get("employees", 'name, mobile, email', ['id' => $this->session->auth]);
+				$this->user = (object) $this->main->get("employees", 'name, mobile, email, pack_id', ['id' => $this->session->auth]);
 				break;
 		}
         

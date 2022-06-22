@@ -7,7 +7,7 @@
                     <div class="media">
                         <div class="media-body">
                             <h5 class="mt-0 mb-0 f-w-600">
-                                <span class="counter"><?= $this->main->counter('users', ['is_deleted' => 0]) ?></span>
+                                <span class="counter"><?= $this->users_model->count() ?></span>
                             </h5>
                             <p>Total Users</p>
                         </div>

@@ -43,8 +43,8 @@ class Users extends Admin_controller  {
 			$action = '<div class="btn-group" role="group"><button class="btn btn-success dropdown-toggle" id="btnGroupVerticalDrop1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="icon-settings"></span></button><div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1" x-placement="bottom-start">';
             
-            if($this->main->plan_purchased($row->id))
-                $action .= anchor($this->redirect."/chat/".e_id($row->id), '<i class="fa fa-comments"></i> Chat</a>', 'class="dropdown-item" target="_blank"');
+            // if($this->main->plan_purchased($row->id))
+            $action .= anchor($this->redirect."/chat/".e_id($row->id), '<i class="fa fa-comments"></i> Chat</a>', 'class="dropdown-item" target="_blank"');
 
             $action .= '</div></div>';
 
