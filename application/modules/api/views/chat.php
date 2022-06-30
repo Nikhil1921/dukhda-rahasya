@@ -30,26 +30,35 @@
                             </div>
                         </div>
                         <div class="card-body msg_card_body">
-                        <?php foreach($chats as $chat): 
-                            echo ($chat['message_type'] === "Admin") ? 
-                            '<div class="d-flex justify-content-start mb-4">
+                            <?php foreach($chats as $chat): 
+                                echo ($chat['message_type'] === "Admin") ? 
+                                '<div class="d-flex justify-content-start mb-4">
+                                    <div class="img_cont_msg">
+                                        '.img($astrologer->image, '', 'class="rounded-circle user_img"').'
+                                    </div>
+                                    <div class="msg_cotainer">
+                                        '.$chat['message'].'
+                                        <span class="msg_time">'.date('d-m-Y h:i a', $chat['created_at']).'</span>
+                                    </div>
+                                </div>' : '<div class="d-flex justify-content-end mb-4">
+                                                <div class="msg_cotainer_send">
+                                                    '.$chat['message'].'
+                                                    <span class="msg_time_send">'.date('d-m-Y h:i a', $chat['created_at']).'</span>
+                                                </div>
+                                                <div class="img_cont_msg">
+                                                    '.img($profile['image'], '', 'class="rounded-circle user_img_msg"').'
+                                                </div>
+                                            </div>';
+                            endforeach ?>
+                            <div class="d-flex justify-content-start mb-4">
                                 <div class="img_cont_msg">
-                                    '.img($astrologer->image, '', 'class="rounded-circle user_img"').'
+                                    <?= img($astrologer->image, '', 'class="rounded-circle user_img"') ?>
                                 </div>
                                 <div class="msg_cotainer">
-                                    '.$chat['message'].'
-                                    <span class="msg_time">'.date('d-m-Y h:i a', $chat['created_at']).'</span>
+                                    Welcome to <?= APP_NAME ?>
+                                    <span class="msg_time"><?= date('d-m-Y h:i a') ?></span>
                                 </div>
-                            </div>' : '<div class="d-flex justify-content-end mb-4">
-                                            <div class="msg_cotainer_send">
-                                                '.$chat['message'].'
-                                                <span class="msg_time_send">'.date('d-m-Y h:i a', $chat['created_at']).'</span>
-                                            </div>
-                                            <div class="img_cont_msg">
-                                                '.img($profile['image'], '', 'class="rounded-circle user_img_msg"').'
-                                            </div>
-                                        </div>';
-                        endforeach ?>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <div class="input-group">
