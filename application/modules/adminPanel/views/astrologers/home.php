@@ -12,6 +12,8 @@
             <thead>
                 <th class="target">Sr.</th>
                 <th>Name</th>
+                <th>From Time</th>
+                <th>To Time</th>
                 <th>Place</th>
                 <th>Education</th>
                 <th>Experience</th>

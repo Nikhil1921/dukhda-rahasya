@@ -37,6 +37,8 @@ class Astrologers extends Admin_controller  {
             $sub_array = [];
             $sub_array[] = $sr;
             $sub_array[] = $row->name;
+            $sub_array[] = date('h:i A', strtotime($row->from_time));
+            $sub_array[] = date('h:i A', strtotime($row->to_time));
             $sub_array[] = $row->place;
             $sub_array[] = $row->education;
             $sub_array[] = $row->experience;

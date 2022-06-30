@@ -89,6 +89,9 @@
                             <li>
                                 <?= anchor(admin('employees'), '<i data-feather="users"></i><span> Employees</span>', 'class="sidebar-header '.($name === 'employees' ? 'active' : '').'"') ?>
                             </li>
+                            <li>
+                                <?= anchor(admin('notification'), '<i data-feather="users"></i><span> Send notification</span>', 'class="sidebar-header '.($name === 'notification' ? 'active' : '').'"') ?>
+                            </li>
                         </ul>
                     </div>
                 </div>

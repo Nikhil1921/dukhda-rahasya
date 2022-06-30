@@ -16,7 +16,7 @@ class Home extends API_controller {
 
 		$this->form_validation->set_rules('mobile', 'Mobile', 'required|is_natural|exact_length[10]', ['required' => "%s is required", 'is_natural' => "%s is invalid", 'exact_length' => "%s is invalid"]);
 		$this->form_validation->set_rules('password', 'Password', 'required', ['required' => "%s is required"]);
-		// $this->form_validation->set_rules('token', 'Token', 'required', ['required' => "%s is required"]);
+		$this->form_validation->set_rules('token', 'Token', 'required', ['required' => "%s is required"]);
 		verifyRequiredParams();
 		
 		$post = [
@@ -26,10 +26,7 @@ class Home extends API_controller {
 		
 		$user = $this->api->getProfile($post);
 
-		/* if($user)
-		{
-			$this->api->update(['id' => $user['id']], ['token' => $this->input->post('token')], $this->table);
-		} */
+		if($user) $this->api->update(['id' => $user['id']], ['token' => $this->input->post('token')], $this->table);
 		
 		$response['row'] = $user ? $user : [];
 		$response['error'] = $user ? false : true;
@@ -160,7 +157,7 @@ class Home extends API_controller {
 		echoRespnse(200, $response);
 	}
 
-	public function chat_verify($id)
+	/* public function chat_verify($id)
 	{
 		$plan = $this->main->plan_purchased($id);
 		
@@ -183,7 +180,7 @@ class Home extends API_controller {
 		}
 
 		echoRespnse(200, $response);
-	}
+	} */
 
 	public function chat($id)
 	{
@@ -209,12 +206,13 @@ class Home extends API_controller {
 
 			echo ($this->main->add($post, 'chats')) ? 'success' : 'error';
 		}else{
-
+			get();
+			
 			$data['id'] = $id;
 			$data['chats'] = $this->main->getAll('chats', 'message, created_at, message_type', ['u_id' => $id], '', 100);
 			$data['astrologer'] = $this->main->plan_purchased($id);
-			
-			if($data['astrologer'])
+
+			if($data['astrologer'] && date("H:i:s") > $data['astrologer']->from_time && date("H:i:s") < $data['astrologer']->to_time)
 			{
 				$this->load->model('api_model');
 				$profile = $this->api_model->get($this->table, 'CONCAT("'.$this->config->item('users').'", image) image', ['id' => $id]);
@@ -223,7 +221,9 @@ class Home extends API_controller {
 				return $this->load->view('chat', $data);
 			}
 			else
-				return $this->chat_verify($id);
+			{
+				return $this->load->view('chat-error', $data);
+			}
 		}
 	}
 }

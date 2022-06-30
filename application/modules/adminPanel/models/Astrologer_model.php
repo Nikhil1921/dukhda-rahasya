@@ -6,10 +6,10 @@
 class Astrologer_model extends MY_Model
 {
 	public $table = "astrologers a";
-	public $select_column = ['a.id', 'a.name', 'a.place', 'a.education', 'a.experience', 'p.price'];
-	public $search_column = ['a.name', 'a.place', 'a.education', 'a.experience', 'p.price'];
-    public $order_column = [null, 'a.name', 'a.place', 'a.education', 'a.experience', 'p.price', null];
-	public $order = ['a.id' => 'DESC'];
+	public $select_column = ['a.id', 'a.name', 'a.from_time', 'a.to_time', 'a.place', 'a.education', 'a.experience', 'p.price'];
+	public $search_column = ['a.name', 'a.from_time', 'a.to_time', 'a.place', 'a.education', 'a.experience', 'p.price'];
+    public $order_column = [null, 'a.name', 'a.from_time', 'a.to_time', 'a.place', 'a.education', 'a.experience', 'p.price', null];
+	public $order = ['a.id' => 'ASC'];
 
 	public function make_query()
 	{  

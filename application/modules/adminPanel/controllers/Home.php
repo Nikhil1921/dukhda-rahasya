@@ -14,6 +14,28 @@ class Home extends Admin_controller  {
         return $this->template->load('template', 'home', $data);
 	}
 
+	public function notification()
+    {
+        if ($this->input->server('REQUEST_METHOD') === "GET")
+        {
+            $data['title'] = 'notification';
+            $data['name'] = 'notification';
+            $data['operation'] = 'send';
+            $data['url'] = $this->redirect;
+
+            return $this->template->load('template', 'notification', $data);
+        }
+        else
+        {
+            $users = $this->main->getAll('users', 'token', ['is_deleted' => 0, 'token != ' => '']);
+
+            foreach ($users as $u)
+                send_notification(APP_NAME, $this->input->post('notification'), $u['token']);
+
+            flashMsg($users, "Notification sent.", "", admin("notification"));
+        }
+    }
+
 	public function profile()
     {
         if ($this->form_validation->run('profile') == FALSE)

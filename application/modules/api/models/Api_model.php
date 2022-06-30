@@ -10,13 +10,14 @@ class Api_model extends MY_Model
 		$this->banners = $this->config->item('banners');
 		$this->category = $this->config->item('category');
 		$this->astrologers = $this->config->item('astrologers');
+        $this->users = $this->config->item('users');
 	}
 
     protected $table = 'users';
 
     public function getProfile($where)
     {
-        return $this->db->select('id, name, mobile, email')
+        return $this->db->select('id, name, mobile, email, CONCAT("'.base_url($this->users).'", image) image')
                         ->from($this->table)
                         ->where($where)
                         ->where(['is_deleted' => 0])

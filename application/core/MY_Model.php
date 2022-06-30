@@ -124,7 +124,7 @@ class MY_Model extends CI_Model
 
 	public function plan_purchased($id)
 	{
-		$this->db->select('UNIX_TIMESTAMP(DATE_ADD(FROM_UNIXTIME(pp.created_at), INTERVAL pp.validity DAY)) AS expiry, pp.daily_validity, a.name, CONCAT("'.$this->config->item('astrologers').'", a.image) AS image')
+		$this->db->select('UNIX_TIMESTAMP(DATE_ADD(FROM_UNIXTIME(pp.created_at), INTERVAL pp.validity DAY)) AS expiry, a.name, CONCAT("'.$this->config->item('astrologers').'", a.image) AS image, a.from_time, a.to_time')
 		         ->from('purchased_plans pp')
 				 ->where('pp.u_id', $id)
 				 ->where('pp.is_approved', 1)
@@ -133,6 +133,17 @@ class MY_Model extends CI_Model
 
 		return $this->db->get()->row();
 	}
+	/* public function plan_purchased($id)
+	{
+		$this->db->select('UNIX_TIMESTAMP(DATE_ADD(FROM_UNIXTIME(pp.created_at), INTERVAL pp.validity DAY)) AS expiry, pp.daily_validity, a.name, CONCAT("'.$this->config->item('astrologers').'", a.image) AS image')
+		         ->from('purchased_plans pp')
+				 ->where('pp.u_id', $id)
+				 ->where('pp.is_approved', 1)
+				 ->having('expiry > ', time())
+				 ->join('astrologers a', 'a.id = pp.a_id');
+
+		return $this->db->get()->row();
+	} */
 
     public function chat_timer($api)
     {

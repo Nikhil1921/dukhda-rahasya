@@ -15,6 +15,24 @@ class User extends API_controller {
 		echoRespnse(200, $response);
 	}
 
+	public function chat_verify()
+	{
+		get();
+		
+		$plan = $this->main->plan_purchased($this->api);
+		
+		if(!$plan) {
+			$response['error'] = true;
+			$response['message'] = "You don't have active purchased plan or purchased plan is expired.";
+		}else{
+			$response['row'] = $plan;
+			$response['error'] = false;
+			$response['message'] = "Plan success.";
+		}
+
+		echoRespnse(200, $response);
+	}
+
     public function purchase_plan()
     {
 		post(); 
