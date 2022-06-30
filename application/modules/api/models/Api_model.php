@@ -53,7 +53,7 @@ class Api_model extends MY_Model
 
     public function getAstrologers($get=[])
     {
-        $this->db->select('a.id, a.name, a.pack_id, a.place, a.experience, a.education, p.p_name, p.price, p.validity, CONCAT("'.base_url($this->astrologers).'", image) image, p.daily_validity')
+        $this->db->select('a.id, a.name, a.pack_id, a.place, a.experience, a.education, p.p_name, p.price, p.validity, CONCAT("'.base_url($this->astrologers).'", image) image, p.daily_validity, a.from_time, a.to_time')
                  ->where('a.is_deleted', 0)
                  ->join('astrologers a', 'ac.ast_id = a.id')
                  ->join('packages p', 'a.pack_id = p.id');
