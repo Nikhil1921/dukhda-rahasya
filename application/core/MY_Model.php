@@ -122,7 +122,7 @@ class MY_Model extends CI_Model
 		return $this->db->get_where($table, $where)->num_rows();
 	}
 
-	public function plan_purchased($id)
+	public function plan_purchased($id, $ast = null)
 	{
 		$this->db->select('UNIX_TIMESTAMP(DATE_ADD(FROM_UNIXTIME(pp.created_at), INTERVAL pp.validity DAY)) AS expiry, a.name, CONCAT("'.$this->config->item('astrologers').'", a.image) AS image, a.from_time, a.to_time')
 		         ->from('purchased_plans pp')
@@ -130,6 +130,8 @@ class MY_Model extends CI_Model
 				 ->where('pp.is_approved', 1)
 				 ->having('expiry > ', time())
 				 ->join('astrologers a', 'a.id = pp.a_id');
+
+		if($ast) $this->db->where('a.id', $ast);
 
 		return $this->db->get()->row();
 	}

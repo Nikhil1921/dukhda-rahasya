@@ -135,6 +135,8 @@ class Home extends API_controller {
 	{
 		get();
 
+		verifyRequiredParams(['auth']);
+
 		$asts = $this->api->getAstrologers($this->input->get());
 		
 		$response['row'] = $asts ? $asts : [];

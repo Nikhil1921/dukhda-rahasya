@@ -58,15 +58,18 @@ class Api_model extends MY_Model
                  ->join('astrologers a', 'ac.ast_id = a.id')
                  ->join('packages p', 'a.pack_id = p.id');
 
-        if(isset($get['c_id']) > 0) $asts = $this->db->where('ac.cat_id', $get['c_id']);
+        if(isset($get['c_id'])) $asts = $this->db->where('ac.cat_id', $get['c_id']);
         
-        if(isset($get['pack_id']) > 0) $asts = $this->db->where('p.id', $get['pack_id']);
+        if(isset($get['pack_id'])) $asts = $this->db->where('p.id', $get['pack_id']);
 
         $asts = $this->db->group_by('ac.ast_id')
                          ->get('astrologers_category ac')
                          ->result_array();
 
-        $asts = array_map(function($ast) {
+        $asts = array_map(function($ast) use ($get) {
+            $p = $this->plan_purchased($get['auth'], $ast['id']);
+            $ast['plan'] = $p ? true : false;
+                                    
             $ast['cats'] = $this->db->select('c.cat_name, c.id')
                                     ->where('c.is_deleted', 0)
                                     ->where('ac.ast_id', $ast['id'])
